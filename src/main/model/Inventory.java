@@ -26,18 +26,15 @@ public class Inventory {
     }
 
     //MODIFIES: this
-    //EFFECT: attempts to remove an item from the inventory and returns 0 if
-    //there is no item to remove, 1 if the item does not exist in the inventory
-    //and 2 if the item has been successfully removed
-    public int removeItem(String id) {
+    //EFFECT: attempts to remove an item from the inventory and returns true if
+    //the item is successfully removed and false if not.
+    public boolean removeItem(String id) {
         Item itemToRemove = findItemByID(id);
-        if (items.size() == 0) {
-            return 0;
-        } else if (itemToRemove != null) {
-            return 1;
+        if (itemToRemove != null) {
+            return false;
         } else {
             items.remove(itemToRemove);
-            return 2;
+            return true;
         }
     }
 
@@ -46,10 +43,20 @@ public class Inventory {
     public Item findItemByID(String id) {
         Item item = null;
         for (Item i : items) {
-            if (item.getID() == id) {
+            if (i.getID() == id) {
                 item = i;
             }
         }
         return item;
+    }
+
+    //EFFECT: returns the items currently stored in the inventory
+    //as an array list
+    public List<Item> getItems() {
+        return items;
+    }
+
+    public int getItemsCount(){
+        return items.size();
     }
 }
