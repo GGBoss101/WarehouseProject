@@ -160,6 +160,7 @@ public class Warehouse {
         if (c.equals("1")) {
             System.out.println("Please enter the new name of the item:");
             String name = scanner.nextLine();
+            checkMenu(name);
             selectedItem.setName(name);
         } else if (c.equals("2")) {
             System.out.println("Please enter the new ID of the item:");
@@ -175,6 +176,7 @@ public class Warehouse {
         } else if (c.equals("3")) {
             System.out.println("Please enter the new description of the item:");
             String description = scanner.nextLine();
+            checkMenu(description);
             selectedItem.setDescription(description);
         }
     }
