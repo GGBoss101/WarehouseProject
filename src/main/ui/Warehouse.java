@@ -29,8 +29,9 @@ public class Warehouse {
             System.out.println("5. Change an item's information (identifying with ID)");
             System.out.println("6. Save current warehouse status");
             System.out.println("7. Quit application");
-            int choice = Integer.parseInt(scanner.next());
-            choiceHandler(choice);
+            String choice = scanner.nextLine();
+            checkMenu(choice);
+            choiceHandler(Integer.parseInt(choice));
         }
     }
 
@@ -46,6 +47,8 @@ public class Warehouse {
             addItem();
         } else if (choice == 4) {
             removeItem();
+        } else if (choice == 5) {
+            changeInfo();
         } else if (choice == 7) {
             scanner.close();
             System.exit(0);
@@ -64,13 +67,13 @@ public class Warehouse {
         if (!isSummary) {
             for (Item i : items) {
                 String out = "Name: " + i.getName() + ", ID: " + i.getID();
-                out = out + "\nDescription: " + i.getDescription();
+                out = out + ", Description: " + i.getDescription();
                 System.out.println(out);
             }
         } else {
             Map<String, Integer> counts = new HashMap<>();
             for (Item i : items) {
-                List<String> names = (List<String>) counts.keySet();
+                List<String> names = new ArrayList<>(counts.keySet());
                 if (!names.contains(i.getName())) {
                     counts.put(i.getName(), 1);
                 } else {
@@ -78,9 +81,10 @@ public class Warehouse {
                     counts.put(i.getName(), count);
                 }
             }
-            List<String> keys = (List<String>) counts.keySet();
+            List<String> keys = new ArrayList<>(counts.keySet());
             for (String key : keys) {
                 String out = key + " x " + counts.get(key);
+                System.out.println(out);
             }
         }
     }
@@ -90,19 +94,19 @@ public class Warehouse {
     //the relevant explanation
     public void addItem() {
         System.out.println("Please enter the name of the item you would like to add:");
-        String name = scanner.next();
+        String name = scanner.nextLine();
         checkMenu(name);
         System.out.println("Please enter the ID of the item you would like to add:");
-        String id = scanner.next();
+        String id = scanner.nextLine();
         checkMenu(id);
         while (inventory.findItemByID(id) != null) {
             System.out.println("ERROR: An item with this ID already exists.");
             System.out.println("Please re-enter the ID of the item you would like to add:");
-            id = scanner.next();
+            id = scanner.nextLine();
             checkMenu(id);
         }
         System.out.println("Please enter the description of the item you would like to add:");
-        String description = scanner.next();
+        String description = scanner.nextLine();
         checkMenu(description);
         boolean added = inventory.addItem(new Item(id, name, description));
         if (!added) {
@@ -121,23 +125,64 @@ public class Warehouse {
             return;
         }
         System.out.println("Please enter the ID of the item you would like to remove from the inventory:");
-        String id = scanner.next();
+        String id = scanner.nextLine();
         checkMenu(id);
         boolean isRemoved = inventory.removeItem(id);
-        while (isRemoved != true) {
+        while (!isRemoved) {
             System.out.println("No item with this ID exists.");
             System.out.println("Please re-enter the ID of the item you would like to remove:");
-            id = scanner.next();
+            id = scanner.nextLine();
             checkMenu(id);
             isRemoved = inventory.removeItem(id);
         }
         System.out.println("Item has been successfully removed!");
     }
 
+    //MODIFIES: this
+    //EFFECT: changes an item's information based on the user's preference
+    public void changeInfo() {
+        System.out.println("Please enter the ID of the item whose information you would like to change.");
+        String id = scanner.nextLine();
+        checkMenu(id);
+        Item selectedItem = inventory.findItemByID(id);
+        while (selectedItem == null) {
+            System.out.println("ERROR: No item with this ID exists.");
+            System.out.println("Please re-enter the ID.");
+            id = scanner.nextLine();
+            checkMenu(id);
+            selectedItem = inventory.findItemByID(id);
+        }
+        System.out.println("Please choose which of the following item information to change:");
+        System.out.println("1. Name");
+        System.out.println("2. ID");
+        System.out.println("3. Description");
+        String c = scanner.nextLine();
+        if (c.equals("1")) {
+            System.out.println("Please enter the new name of the item:");
+            String name = scanner.nextLine();
+            selectedItem.setName(name);
+        } else if (c.equals("2")) {
+            System.out.println("Please enter the new ID of the item:");
+            String id2 = scanner.nextLine();
+            checkMenu(id2);
+            while (inventory.findItemByID(id2) != null) {
+                System.out.println("ERROR: An item with this ID already exists.");
+                System.out.println("Please re-enter the new ID of the item:");
+                id2 = scanner.nextLine();
+                checkMenu(id2);
+            }
+            selectedItem.setID(inventory, id2);
+        } else if (c.equals("3")) {
+            System.out.println("Please enter the new description of the item:");
+            String description = scanner.nextLine();
+            selectedItem.setDescription(description);
+        }
+    }
+
     //EFFECT: checks if the user wants to go back to the main menu, and
     //responds accordingly.
     public void checkMenu(String input) {
-        if (input == "!") {
+        if (input.equals("!")) {
             menu();
         }
     }

@@ -20,7 +20,7 @@ public class Inventory {
         if (i != null) {
             return false;
         } else {
-            items.add(item);
+            this.items.add(item);
             return true;
         }
     }
@@ -31,29 +31,33 @@ public class Inventory {
     public boolean removeItem(String id) {
         Item itemToRemove = findItemByID(id);
         if (itemToRemove != null) {
-            return false;
-        } else {
-            items.remove(itemToRemove);
-            return true;
+            int i = 0;
+            for (Item item : this.items) {
+                if (item.equals(itemToRemove)) {
+                    this.items.remove(i);
+                    return true;
+                }
+                i++;
+            }
         }
+        return false;
     }
 
     //EFFECT: Searches for the item with the given ID and returns it
     //if found, and null otherwise
     public Item findItemByID(String id) {
-        Item item = null;
-        for (Item i : items) {
-            if (i.getID() == id) {
-                item = i;
+        for (Item i : this.items) {
+            if (i.getID().equals(id)) {
+                return i;
             }
         }
-        return item;
+        return null;
     }
 
     //EFFECT: returns the items currently stored in the inventory
     //as an array list
     public List<Item> getItems() {
-        return items;
+        return this.items;
     }
 
     public int getItemsCount(){
