@@ -12,3 +12,5 @@ professional setting, which is why I chose this idea.
 - As a user, I want to be able to display the items currently in the warehouse inventory.
 - As a user, I want to be able to ship out the items from the warehouse inventory.
 - As a user, I want to be able to get the descriptions of specific items from the inventory.
+- As a user, I want to be able to save my current inventory.
+- As a user, I want to be able to load a pre-existing inventory into the program from a file.
