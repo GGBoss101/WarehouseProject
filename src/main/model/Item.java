@@ -25,10 +25,11 @@ public class Item {
     }
 
     //MODIFIES: this
-    //EFFECT: sets the ID of the item
+    //EFFECT: sets the ID of the item and returns true or false if it was set
+    //successfully or not respectively.
     public boolean setID(Inventory inventory, String id) {
         Item item = inventory.findItemByID(id);
-        if (item == null) {
+        if (item != null) {
             return false;
         } else {
             this.id = id;
